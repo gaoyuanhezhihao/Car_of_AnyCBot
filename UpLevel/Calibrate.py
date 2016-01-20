@@ -84,8 +84,10 @@ class CarAdmin():
         else:
             # self.port.write(['H'])
             self.port.write(order)
+            print "send order :", order, '\n'
             if pwm is not None:
                 self.port.write(str(pwm))
+                print "send pwm :", pwm, '\n'
             # self.port.write([data1])
             # self.port.write([data2])
             # self.last_order = order
