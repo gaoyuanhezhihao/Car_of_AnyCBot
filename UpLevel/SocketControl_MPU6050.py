@@ -4,8 +4,8 @@ import socket
 import serial
 from Calibrate import CarAdmin
 from threading import Thread
-DEFAULT_SPEED = 15
-
+DEFAULT_SPEED = 30
+com_mpu6050 = 'com6'
 
 def recv_all(sock, length):
     data = ""
@@ -27,7 +27,11 @@ class CarSocketAdmin(CarAdmin):
         self.GlobalMem = 0
         self.GlobalFlag = 0
         self.RightAckFlag = 0
-        Port_name_MPU6050 = raw_input("Choose the MPU6050 port\n")
+
+        if com_mpu6050 is None:
+            Port_name_MPU6050 = raw_input("Choose the MPU6050 port\n")
+        else:
+            Port_name_MPU6050 = com_mpu6050
         self.port_mpu6050 = serial.Serial(Port_name_MPU6050, 115200)
         self.angle = 0
         self.mpu6050_start_angle = 0
@@ -222,7 +226,7 @@ class CarSocketAdmin(CarAdmin):
         if order in ['b', 'l', 'r', 'f'] and self.first_start:
             self.first_start = 0
             self.Send_Direct_Order(order='go', pwm=DEFAULT_SPEED)
-            time.sleep(0.05)
+            time.sleep(0.5)
         if order == 's':
             self.Send_Direct_Order(order='ss')
         elif order == 'l':
@@ -234,7 +238,7 @@ class CarSocketAdmin(CarAdmin):
         elif order == 'b':
             self.Send_Direct_Order(order='bb')
 if __name__ == '__main__':
-    SERVERIP = '127.0.0.1'
+    SERVERIP = '0.0.0.0'
     SERVERPORT = 8888
     Admin = CarSocketAdmin('CarCar', SERVERIP, SERVERPORT, 1)
     Admin.Run()

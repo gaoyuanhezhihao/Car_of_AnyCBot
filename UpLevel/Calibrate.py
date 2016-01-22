@@ -8,7 +8,7 @@ import time
 import pickle
 import pdb
 
-
+com_control = 'com3'
 class CarAdmin():
 
     def __init__(self, name):
@@ -17,9 +17,14 @@ class CarAdmin():
         self.RcvBuffer = []
         self.LastSentOrder = 's'
         self.LastAckTime = 0
-        print("serial port available:\n")
-        print(self.serial_ports())
-        sPortChoic = raw_input("Input the port to open\n")
+
+        if com_control is None:
+            print("serial port available:\n")
+            print(self.serial_ports())
+            sPortChoic = raw_input("Input the port to open\n")
+        else:
+            sPortChoic = com_control
+        
         self.port = serial.Serial(sPortChoic, 9600)
         self.SentOrderRecord = 0
         self.last_direct_order = 0
@@ -84,10 +89,10 @@ class CarAdmin():
         else:
             # self.port.write(['H'])
             self.port.write(order)
-            print "send order :", order, '\n'
+            #print "send order :", order, '\n'
             if pwm is not None:
                 self.port.write(str(pwm))
-                print "send pwm :", pwm, '\n'
+                #print "send pwm :", pwm, '\n'
             # self.port.write([data1])
             # self.port.write([data2])
             # self.last_order = order
